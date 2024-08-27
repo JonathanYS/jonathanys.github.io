@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="PicoCTF 2021 - Stonks challenge Write-up">
+<title>PicoCTF 2021 Stonks Writeup</title>
+
+<link rel='canonical' href='https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/'>
+
+<link rel="stylesheet" href="/scss/style.min.e61342f88436f383f290c54cf2119f875401e326521bce325a4fb2720ab3acab.css"><meta property='og:title' content="PicoCTF 2021 Stonks Writeup">
+<meta property='og:description' content="PicoCTF 2021 - Stonks challenge Write-up">
+<meta property='og:url' content='https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/'>
+<meta property='og:site_name' content='JonathanYS'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='pwn' /><meta property='article:tag' content='cybersecurity' /><meta property='article:tag' content='binary exploitation' /><meta property='article:published_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='og:image' content='https://jonathanys.github.io/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg' />
+<meta name="twitter:title" content="PicoCTF 2021 Stonks Writeup">
+<meta name="twitter:description" content="PicoCTF 2021 - Stonks challenge Write-up"><meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content='https://jonathanys.github.io/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg' />
+    <link rel="shortcut icon" href="/Yonatan_Deri-Logo-300-300.png" />
+
+  
+
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Yonatan_Deri-Logo-300-300_hu5485050438389385317.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">JonathanYS</a></h1>
+            <h2 class="site-description">Hack or be hacked.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/JonathanYS'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/JonathanDY_S'
+                        target="_blank"
+                        title="X"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg"
+   class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path
+      fill-rule="nonezero"
+      d="m 18.326246,2.057053 h 3.373305 L 14.329723,10.480647 23,21.942947 h -6.788976 l -5.316997,-6.952 -6.0840309,6.952 H 1.4343711 L 9.3172031,12.933132 1,2.057053 h 6.9608945 l 4.8063125,6.3542187 z m -1.184047,17.866621 h 1.869356 L 6.9452851,3.9703225 H 4.9395039 Z"
+      />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/about-me/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About Me</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#examination">Examination</a></li>
+    <li><a href="#payload">Payload</a></li>
+    <li><a href="#interpreting-the-output">Interpreting The Output</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/posts/Write-ups/picoctf-2021-stonks-writeup/">
+                
+                    <img src="/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg" loading="lazy" alt="Featured image of post PicoCTF 2021 Stonks Writeup" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/write-ups/" style="background-color: #4704DB; color: #FFFFFF;">
+                Write-ups
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/Write-ups/picoctf-2021-stonks-writeup/">PicoCTF 2021 Stonks Writeup</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            PicoCTF 2021 - Stonks challenge Write-up
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 31, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="stonks">Stonks
+</h1><p>This challenge was part of the PicoCTF 2021 and was part of the Binary Exploitation genre. It was very fun to solve.
+Let&rsquo;s start with the examination.</p>
+<p>Available files: <a class="link" href="attached_files/writeups/2024/picoctf-2021-stonks-writeup/vuln.c" >vuln.c</a></p>
+<h2 id="examination">Examination
+</h2><p>After reading a bit of the code we can detect a Format String vulnerability.
+The interesting function in this program is <b style="color:blue;">buy_stonks</b>.</p>
+<pre><code>int buy_stonks(Portfolio *p) {
+    if (!p) {
+        return 1;
+    }
+    <b style="color:green;">char api_buf[FLAG_BUFFER];
+    FILE *f = fopen("api","r");</b>
+    if (!f) {
+        printf("Flag file not found. Contact an admin.\n");
+        exit(1);
+    }
+    <b style="color:green;">fgets(api_buf, FLAG_BUFFER, f);</b>
+
+    int money = p->money;
+    int shares = 0;
+    Stonk *temp = NULL;
+    printf("Using patented AI algorithms to buy stonks\n");
+    while (money > 0) {
+        shares = (rand() % money) + 1;
+        temp = pick_symbol_with_AI(shares);
+        temp->next = p->head;
+        p->head = temp;
+        money -= shares;
+    }
+    printf("Stonks chosen\n");
+
+    // TODO: Figure out how to read token from file, for now just ask
+
+    char *user_buf = malloc(300 + 1);
+    printf("What is your API token?\n");
+    <b style="color:green;">scanf("%300s", user_buf);</b>
+    printf("Buying stonks with token:\n");
+    <b style="color:green;">printf(user_buf);</b>
+
+    // TODO: Actually use key to interact with API
+
+    view_portfolio(p);
+
+    return 0;
+}</code></pre>
+<p>The fact that there is a variable called api_buf that stores the flag&rsquo;s contents and is on the stack, alerts us that it might be possible to use some kind of leaking technique, to get the actual flag.
+As we can see from the picture above, the program reads the contents of the flag from a file called api. The program asks us to enter some input (maximum of 300 bytes) and then prints it using printf() function from libc. A clear Format-String Vulnerability.</p>
+<h2 id="payload">Payload
+</h2><p>We will enter lots of %xs to leak the flag value on the stack.</p>
+<p><img src="/images/2024/picoctf-2021-stonks-writeup/input_example.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Input example"
+	
+	
+></p>
+<h2 id="interpreting-the-output">Interpreting The Output
+</h2><p>Now, this might look like gibrish to us. But all of these values are hexadecimal values, and some of them incoorapte to ascii values. To convert these values to ascii values, we will use the following technique.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> -n <span class="o">{</span>your-hexadecimal-values<span class="o">}</span> <span class="p">|</span> perl -pe <span class="s1">&#39;s/([0-9a-f]{2})/chr hex $1/gie&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Source of this method <a class="link" href="https://stackoverflow.com/questions/1604765/how-to-convert-hex-to-ascii-characters-in-the-linux-shell#7681385"  target="_blank" rel="noopener"
+    >here</a>.</p>
+<p>This is the output of the above command:</p>
+<pre><code>���H�?���������p��9     !c�<b style="color:green;">ocip{FTC0l_I4_t5m_ll0m_y_y3nbc7ceac6��}�</b>�*���T@~�~4Ο�
+                                                                                �\���#�~%h������2D�����p��~ ��2x���P����~����2x�H�i!A`��2d��2x�H���?���3,��3$����2��ݯ���p��p}����3$��3,��2���p���
+�M�_��P�0������b�H�Q��3$�H�0���`��3��)@�����></code></pre>
+<p>Now, the output still looks not so familiar to the human eye. This is because of two reasons:</p>
+<ol>
+<li>The addresses of this binary are stored in little-endian (and we know that this is a 32-bit binary, by the length of the addresses).</li>
+<li>We are leaking a lot of addresses from the stack. Lots of them don&rsquo;t have any connection to ascii values.</li>
+</ol>
+<p>We will need to identify the exact values of the flag. We can do that by looking at the ascii table and determine what is the value of the letter &lsquo;o&rsquo;, which is the start of the little-endian flag that we are looking for. The ascii value is <b style="color:blue;">6f</b>. We can confidently delete all the values up until this value. Little-endian means that the addresses are reversed. Every 4 bytes. &ldquo;pico&rdquo; is the first 4 bytes of our flag and that is why the letter &ldquo;o&rdquo; will be the first letter of it in little-endian.
+After we do this, we can copy the entire flag up until the character &ldquo;}&rdquo;, and place it in a python program inside a variable. The following python code will help us in reversing the entire flag to be in big-endian and thus be readable for us:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;ocip{FTC0l_I4_t5m_ll0m_y_y3nbc7ceac6��}�&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">new_message</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="n">part_message</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">part_message</span> <span class="o">+=</span> <span class="n">_</span>
+</span></span><span class="line"><span class="cl">        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_message</span> <span class="o">+=</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">part_message</span><span class="p">))))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="n">part_message</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">new_message</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>After this function, we may take the output and delete all the <b style="color:blue;">�</b> characters.
+The more elegant and maybe better way to do this operation would be to use RegEx.</p>
+<p><strong>We have the flag!</strong></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/pwn/">Pwn</a>
+        
+            <a href="/tags/cybersecurity/">Cybersecurity</a>
+        
+            <a href="/tags/binary-exploitation/">Binary Exploitation</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/posts/Write-ups/picoctf-2024-fs0-writeup/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg" loading="lazy" data-key="" data-hash="/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PicoCTF 2024 FS0 Writeup</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="jonathanys/jonathanys.github.io"
+    data-repo-id=""
+    data-category="Website&#39;s Comments"
+    data-category-id=""
+    data-mapping="title"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light_high_contrast"
+    data-lang="en"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_high_contrast');
+            } else {
+                setGiscusTheme('dark_high_contrast');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 Yonatan Deri
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

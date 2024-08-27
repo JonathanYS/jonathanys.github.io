@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Pages on JonathanYS</title>
+        <link>https://jonathanys.github.io/page/</link>
+        <description>Recent content in Pages on JonathanYS</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Yonatan Deri</copyright>
+        <lastBuildDate>Sat, 03 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://jonathanys.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>About Me</title>
+        <link>https://jonathanys.github.io/about-me/</link>
+        <pubDate>Sat, 03 Aug 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://jonathanys.github.io/about-me/</guid>
+        <description>&lt;div style=&#34;border: 2px solid #e74c3c; background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0;&#34;&gt;
+  &lt;strong&gt;⚠️ CAUTION&lt;/strong&gt;&lt;br&gt;
+  &lt;strong&gt;The information you gather from this blog, all the techniques, proofs-of-concept code, or whatever else you may possibly find here, are strictly for educational purposes. I do not condone the usage of anything you might gather from this blog for malicious purposes.&lt;/strong&gt;
+&lt;/div&gt;
+&lt;p&gt;Welcome! I’m JonathanYS (also known as JonathanDY and JDY), and this is my personal blog where I share my journey and insights in various fields, with a particular focus on Software Development and Cybersecurity.&lt;/p&gt;
+&lt;p&gt;While I’m not an expert in these areas, I am deeply passionate about learning and sharing knowledge in an accessible way. My aim is to provide content that is both thorough and well-researched, ensuring that it addresses key questions and challenges. Should you have any questions—whether you’re a novice or more experienced—I welcome them and am eager to research and provide answers.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I am a student and I love to expand my knowledge in lots of fields.&lt;/li&gt;
+&lt;li&gt;I have a deep interest in C/C++ and Python programming languages.&lt;/li&gt;
+&lt;li&gt;I’m an enthusiastic participant in Capture The Flag (CTF) competitions and a fan of security research.&lt;/li&gt;
+&lt;li&gt;I have a passion for riddles and problem-solving challenges. If you have any intriguing puzzles or challenges, I will be happy to take part in solving it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On this blog, you’ll find a range of content including Write-Ups, Proofs of Concept (POCs), and more. My goal is to make complex topics accessible and engaging.&lt;/p&gt;
+&lt;p&gt;I hope you find something that piques your interest. &lt;br&gt;
+Enjoy your stay!&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Archives</title>
+        <link>https://jonathanys.github.io/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://jonathanys.github.io/archives/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Search</title>
+        <link>https://jonathanys.github.io/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://jonathanys.github.io/search/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>

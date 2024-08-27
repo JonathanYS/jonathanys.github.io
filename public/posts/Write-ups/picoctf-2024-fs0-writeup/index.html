@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="PicoCTF 2024 - Format String 0 challenge Write-up">
+<title>PicoCTF 2024 FS0 Writeup</title>
+
+<link rel='canonical' href='https://jonathanys.github.io/posts/Write-ups/picoctf-2024-fs0-writeup/'>
+
+<link rel="stylesheet" href="/scss/style.min.e61342f88436f383f290c54cf2119f875401e326521bce325a4fb2720ab3acab.css"><meta property='og:title' content="PicoCTF 2024 FS0 Writeup">
+<meta property='og:description' content="PicoCTF 2024 - Format String 0 challenge Write-up">
+<meta property='og:url' content='https://jonathanys.github.io/posts/Write-ups/picoctf-2024-fs0-writeup/'>
+<meta property='og:site_name' content='JonathanYS'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='pwn' /><meta property='article:tag' content='cybersecurity' /><meta property='article:tag' content='binary exploitation' /><meta property='article:published_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='og:image' content='https://jonathanys.github.io/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg' />
+<meta name="twitter:title" content="PicoCTF 2024 FS0 Writeup">
+<meta name="twitter:description" content="PicoCTF 2024 - Format String 0 challenge Write-up"><meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content='https://jonathanys.github.io/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg' />
+    <link rel="shortcut icon" href="/Yonatan_Deri-Logo-300-300.png" />
+
+  
+
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Yonatan_Deri-Logo-300-300_hu5485050438389385317.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">JonathanYS</a></h1>
+            <h2 class="site-description">Hack or be hacked.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/JonathanYS'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/JonathanDY_S'
+                        target="_blank"
+                        title="X"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg"
+   class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path
+      fill-rule="nonezero"
+      d="m 18.326246,2.057053 h 3.373305 L 14.329723,10.480647 23,21.942947 h -6.788976 l -5.316997,-6.952 -6.0840309,6.952 H 1.4343711 L 9.3172031,12.933132 1,2.057053 h 6.9608945 l 4.8063125,6.3542187 z m -1.184047,17.866621 h 1.869356 L 6.9452851,3.9703225 H 4.9395039 Z"
+      />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/about-me/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About Me</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#first-look">First look</a></li>
+    <li><a href="#under-the-hood">Under The Hood</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/posts/Write-ups/picoctf-2024-fs0-writeup/">
+                
+                    <img src="/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg" loading="lazy" alt="Featured image of post PicoCTF 2024 FS0 Writeup" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/write-ups/" style="background-color: #4704DB; color: #FFFFFF;">
+                Write-ups
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/Write-ups/picoctf-2024-fs0-writeup/">PicoCTF 2024 FS0 Writeup</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            PicoCTF 2024 - Format String 0 challenge Write-up
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 31, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    7 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="format-string-0">format string 0
+</h1><p>Hello everyone.
+Firstly, this challenge is attached to the source code file and the binary itself. You may see this from the files that I provided (except for the binary file, which currently has a download issue. I believe this will be resolved soon.). If you wish to obtain the required flag for this challenge, you would need to connect to the server operating these challenges using the challenge instance, using <b style="color:blue;">netcat</b>.</p>
+<p>In this challenge, we could notice and understand what are the operations required from us to get the flag even without looking at the source code. I noticed that it is quite common among picoCTF challenges to be represented in this form. Of course, I am going to cover the source code as well for our understanding of what&rsquo;s going on under the hood.
+Let&rsquo;s begin.</p>
+<p>Available files: <a class="link" href="/attached_files/writeups/2024/picoctf-2024-fs0-writeup/format-string-0.c" >format-string-0.c</a></p>
+<h2 id="first-look">First look
+</h2><p>We connect to the server through the provided instance. In my case:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nc mimas.picoctf.net 64224
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>We get the following output:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Welcome to our newly-opened burger place Pico &#39;n Patty! Can you help the picky customers find their favorite burger?
+</span></span><span class="line"><span class="cl">Here comes the first customer Patrick who wants a giant bite.
+</span></span><span class="line"><span class="cl">Please choose from the following burgers: Breakf@st_Burger, Gr%114d_Cheese, Bac0n_D3luxe
+</span></span><span class="line"><span class="cl">Enter your recommendation:
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As we may understand from the challenge name (&ldquo;format string&hellip;&rdquo;) and from the named burgers. We might need to select the named burger that includes a string format specifier. We can see that the second named burger included a string format specifier by the <b style="color:blue;">%</b> symbol. Let&rsquo;s select that name and see the result. We get the following output:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Enter your recommendation: Gr%114d_Cheese
+</span></span><span class="line"><span class="cl">Gr
+</span></span><span class="line"><span class="cl"> 4202954_Cheese
+</span></span><span class="line"><span class="cl">Good job! Patrick is happy! Now can you serve the second customer?
+</span></span><span class="line"><span class="cl">Sponge Bob wants something outrageous that would break the shop (better be served quick before the shop owner kicks you out!)
+</span></span><span class="line"><span class="cl">Please choose from the following burgers: Pe%to_Portobello, $outhwest_Burger, Cla%sic_Che%s%steak
+</span></span><span class="line"><span class="cl">Enter your recommendation:
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Now, the reason for the numbers displayed on screen (<b style="color:blue;">4202954</b>) is that the string format specifier in the name of the burger we inputted, includes an integer string format specifier (<b style="color:blue;">%d</b>):</p>
+<p>Gr<b style="color:blue;">%114d</b>_Cheese</p>
+<p>The whole idea of a format string vulnerability is that it enables the attacker to read or write arbitrary data from and to the stack. So when we input this name of burger to the program, we get an integer formed data that is actually from the stack. It may contain valuable data in many cases.
+The number 114 before the letter &rsquo;d&rsquo; is for the maximum field width. The conversion will stop after the specified number of characters has been processed. For more information read the following discussion on Stackoverflow: <a class="link" href="https://stackoverflow.com/questions/16231136/what-does-a-number-between-and-format-specifier-mean-in-scanf"  target="_blank" rel="noopener"
+    >https://stackoverflow.com/questions/16231136/what-does-a-number-between-and-format-specifier-mean-in-scanf</a>.
+Now, the reason for this message: &ldquo;(better be served quick before the shop owner kicks you out!)&rdquo;, is to notify you that if you don&rsquo;t enter an input soon, the connection between your machine and the server will be closed. There is a timeout of connection when using <b style="color:blue;">netcat</b> to connect to a server, when there is no input for some time. After that, we need to enter another name of a burger from a list of names of burgers. This time we can see two names that have the <b style="color:blue;">%</b> symbol. But we can see that only one name includes a real string format specifier. The first name includes a <b style="color:blue;">%t</b>, which is not a real format string specifier. In contrast, the third name includes 3 real format string specifiers of string type. This means that if we enter the name of this burger we would get a string form of data from the stack. I have a hunch that it would be the flag. Let&rsquo;s enter it. After entering this name, we get the following output:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Enter your recommendation: Cla%sic_Che%s%steak
+</span></span><span class="line"><span class="cl">ClaCla%sic_Che%s%steakic_Che(null)
+</span></span><span class="line"><span class="cl">picoCTF{7h3_cu570m3r_15_n3v3r_SEGFAULT_74f6c0e7}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Which includes the required flag.
+By the way, if we tried to input just format string specifiers, it wouldn&rsquo;t work, because the program checks that the input is one of the three named burgers in the lists provided.</p>
+<h2 id="under-the-hood">Under The Hood
+</h2><p>Let&rsquo;s examine the important parts of this program (marked in green).</p>
+<pre><code><b style="color:green;">#define BUFSIZE 32</b>
+#define FLAGSIZE 64
+
+<b style="color:green;">char flag[FLAGSIZE];</b>
+
+int main(int argc, char **argv){
+    FILE *f = fopen("flag.txt", "r");
+    if (f == NULL) {
+        printf("%s %s", "Please create 'flag.txt' in this directory with your",
+                        "own debugging flag.\n");
+        exit(0);
+    }
+
+    <b style="color:green;">fgets(flag, FLAGSIZE, f);</b>
+    signal(SIGSEGV, sigsegv_handler);
+
+    gid_t gid = getegid();
+    setresgid(gid, gid, gid);
+
+    <b style="color:green;">serve_patrick();</b>
+  
+    return 0;
+}
+
+void serve_patrick() {
+    printf("%s %s\n%s\n%s %s\n%s",
+            "Welcome to our newly-opened burger place Pico 'n Patty!",
+            "Can you help the picky customers find their favorite burger?",
+            "Here comes the first customer Patrick who wants a giant bite.",
+            "Please choose from the following burgers:",
+            "Breakf@st_Burger, Gr%114d_Cheese, Bac0n_D3luxe",
+            "Enter your recommendation: ");
+    fflush(stdout);
+
+    char choice1[BUFSIZE];
+    scanf("%s", choice1);
+    char *menu1[3] = {"Breakf@st_Burger", "Gr%114d_Cheese", "Bac0n_D3luxe"};
+    if (!on_menu(choice1, menu1, 3)) {
+        printf("%s", "There is no such burger yet!\n");
+        fflush(stdout);
+    } else {
+        <b style="color:green;">int count = printf(choice1);
+        if (count > 2 * BUFSIZE) {
+            serve_bob();
+        }</b> else {
+            printf("%s\n%s\n",
+                    "Patrick is still hungry!",
+                    "Try to serve him something of larger size!");
+            fflush(stdout);
+        }
+    }
+}
+
+void serve_bob() {
+    printf("\n%s %s\n%s %s\n%s %s\n%s",
+            "Good job! Patrick is happy!",
+            "Now can you serve the second customer?",
+            "Sponge Bob wants something outrageous that would break the shop",
+            "(better be served quick before the shop owner kicks you out!)",
+            "Please choose from the following burgers:",
+            "Pe%to_Portobello, $outhwest_Burger, Cla%sic_Che%s%steak",
+            "Enter your recommendation: ");
+    fflush(stdout);
+
+    char choice2[BUFSIZE];
+    scanf("%s", choice2);
+    char *menu2[3] = {"Pe%to_Portobello", "$outhwest_Burger", "Cla%sic_Che%s%steak"};
+    if (!on_menu(choice2, menu2, 3)) {
+        printf("%s", "There is no such burger yet!\n");
+        fflush(stdout);
+    } else {
+        <b style="color:green;">printf(choice2);</b>
+        fflush(stdout);
+    }
+}
+}</code></pre>
+<p>Please pay attention to the third marked line. At this line, the program copies the contents of flag.txt (f) to the local variable flag. You need to understand that after this line gets executed, the local variable flag is present on the stack, in a register. Now, because there is a problem when downloading the actual binary, we can&rsquo;t run <b style="color:blue;">checksec</b> on it. But, because I participated in this CTF and the binary download worked, I can write that this binary is 64-bit. The reason that this is an important detail (for our understanding) is that in 64-bit binaries, the first variables are stored in the registers first - RDI, RSI, RDX, RCX, R8, R9, stack&hellip;, in that order. And, the memory addresses in 64-bit binaries are 8 bytes long (64 bits).</p>
+<p>If we look at the fifth marked line, we can see that after we enter our choice there is an integer variable that is storing <b style="color:blue;">printf(choice1)</b> (choice1 = our input). After that line, the program checks if that variable is greater than two times the size of BUFSIZE which is equal to 64 (as we can calculate from the first marked line). If you recall the number we got when we entered the name of a burger the first time, we got a very large number, 4202954 to be exact. Now, this number alone, without the other characters with it, is greater than 64. That is why the program calls <b style="color:blue;">serve_bob()</b> function. This large number is some value from the stack, printed in decimal, it could include the flag, but it isn&rsquo;t clear to us. The reason we get values from the stack in this situation is that the string we input includes format string specifier (<b style="color:blue;">%d - Gr%114d_Cheese</b>). And, when the program prints our input without specifying any parameters to the format string specifier, the program prints the values that are present on the stack instead, as the parameters.</p>
+<p>Next, when we input <b style="color:blue;">Cla%sic_Che%s%steak</b>, the program then prints the values, without specifying any parameters. And then, takes values off the stack instead, and prints them to us. The number of format string specifiers of type string is enough in this case (3), to print the entire flag value off the stack.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/pwn/">Pwn</a>
+        
+            <a href="/tags/cybersecurity/">Cybersecurity</a>
+        
+            <a href="/tags/binary-exploitation/">Binary Exploitation</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/posts/Write-ups/picoctf-2021-stonks-writeup/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg" loading="lazy" data-key="" data-hash="/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PicoCTF 2021 Stonks Writeup</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="jonathanys/jonathanys.github.io"
+    data-repo-id=""
+    data-category="Website&#39;s Comments"
+    data-category-id=""
+    data-mapping="title"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light_high_contrast"
+    data-lang="en"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_high_contrast');
+            } else {
+                setGiscusTheme('dark_high_contrast');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 Yonatan Deri
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
