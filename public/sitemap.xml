@@ -2,49 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://jonathanys.github.io/about-me/</loc>
+    <loc>http://localhost:1313/about-me/</loc>
     <lastmod>2024-08-03T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/</loc>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2024-08-03T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/page/</loc>
+    <loc>http://localhost:1313/page/</loc>
     <lastmod>2024-08-03T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/tags/binary-exploitation/</loc>
+    <loc>http://localhost:1313/tags/binary-exploitation/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/categories/</loc>
+    <loc>http://localhost:1313/categories/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/tags/cybersecurity/</loc>
+    <loc>http://localhost:1313/tags/cybersecurity/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/</loc>
+    <loc>http://localhost:1313/posts/Write-ups/picoctf-2021-stonks-writeup/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/posts/Write-ups/picoctf-2024-fs0-writeup/</loc>
+    <loc>http://localhost:1313/posts/Write-ups/picoctf-2024-fs0-writeup/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/posts/</loc>
+    <loc>http://localhost:1313/posts/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/tags/pwn/</loc>
+    <loc>http://localhost:1313/tags/pwn/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/tags/</loc>
+    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/categories/write-ups/</loc>
+    <loc>http://localhost:1313/categories/write-ups/</loc>
     <lastmod>2024-03-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/archives/</loc>
+    <loc>http://localhost:1313/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jonathanys.github.io/categories/defense/</loc>
+    <loc>http://localhost:1313/categories/defense/</loc>
   </url><url>
-    <loc>https://jonathanys.github.io/categories/offense/</loc>
+    <loc>http://localhost:1313/categories/offense/</loc>
   </url><url>
-    <loc>https://jonathanys.github.io/search/</loc>
+    <loc>http://localhost:1313/search/</loc>
   </url>
 </urlset>

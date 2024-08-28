@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Write-ups on JonathanYS</title>
-        <link>https://jonathanys.github.io/categories/write-ups/</link>
+        <link>http://localhost:1313/categories/write-ups/</link>
         <description>Recent content in Write-ups on JonathanYS</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Yonatan Deri</copyright>
-        <lastBuildDate>Sun, 31 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://jonathanys.github.io/categories/write-ups/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 31 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/write-ups/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>PicoCTF 2021 Stonks Writeup</title>
-        <link>https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/</link>
+        <link>http://localhost:1313/posts/Write-ups/picoctf-2021-stonks-writeup/</link>
         <pubDate>Sun, 31 Mar 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/</guid>
-        <description>&lt;img src="https://jonathanys.github.io/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg" alt="Featured image of post PicoCTF 2021 Stonks Writeup" /&gt;&lt;h1 id=&#34;stonks&#34;&gt;Stonks
+        <guid>http://localhost:1313/posts/Write-ups/picoctf-2021-stonks-writeup/</guid>
+        <description>&lt;img src="http://localhost:1313/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg" alt="Featured image of post PicoCTF 2021 Stonks Writeup" /&gt;&lt;h1 id=&#34;stonks&#34;&gt;Stonks
 &lt;/h1&gt;&lt;p&gt;This challenge was part of the PicoCTF 2021 and was part of the Binary Exploitation genre. It was very fun to solve.
 Let&amp;rsquo;s start with the examination.&lt;/p&gt;
 &lt;p&gt;Available files: &lt;a class=&#34;link&#34; href=&#34;attached_files/writeups/2024/picoctf-2021-stonks-writeup/vuln.c&#34; &gt;vuln.c&lt;/a&gt;&lt;/p&gt;
@@ -63,7 +63,7 @@ The interesting function in this program is &lt;b style=&#34;color:blue;&#34;&gt
 As we can see from the picture above, the program reads the contents of the flag from a file called api. The program asks us to enter some input (maximum of 300 bytes) and then prints it using printf() function from libc. A clear Format-String Vulnerability.&lt;/p&gt;
 &lt;h2 id=&#34;payload&#34;&gt;Payload
 &lt;/h2&gt;&lt;p&gt;We will enter lots of %xs to leak the flag value on the stack.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jonathanys.github.io/images/2024/picoctf-2021-stonks-writeup/input_example.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/2024/picoctf-2021-stonks-writeup/input_example.png&#34;
 	
 	
 	
@@ -135,16 +135,16 @@ The more elegant and maybe better way to do this operation would be to use RegEx
         </item>
         <item>
         <title>PicoCTF 2024 FS0 Writeup</title>
-        <link>https://jonathanys.github.io/posts/Write-ups/picoctf-2024-fs0-writeup/</link>
+        <link>http://localhost:1313/posts/Write-ups/picoctf-2024-fs0-writeup/</link>
         <pubDate>Sun, 31 Mar 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://jonathanys.github.io/posts/Write-ups/picoctf-2024-fs0-writeup/</guid>
-        <description>&lt;img src="https://jonathanys.github.io/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg" alt="Featured image of post PicoCTF 2024 FS0 Writeup" /&gt;&lt;h1 id=&#34;format-string-0&#34;&gt;format string 0
+        <guid>http://localhost:1313/posts/Write-ups/picoctf-2024-fs0-writeup/</guid>
+        <description>&lt;img src="http://localhost:1313/images/2024-thumbs/picoctf-2024-fs0-writeup.jpg" alt="Featured image of post PicoCTF 2024 FS0 Writeup" /&gt;&lt;h1 id=&#34;format-string-0&#34;&gt;format string 0
 &lt;/h1&gt;&lt;p&gt;Hello everyone.
 Firstly, this challenge is attached to the source code file and the binary itself. You may see this from the files that I provided (except for the binary file, which currently has a download issue. I believe this will be resolved soon.). If you wish to obtain the required flag for this challenge, you would need to connect to the server operating these challenges using the challenge instance, using &lt;b style=&#34;color:blue;&#34;&gt;netcat&lt;/b&gt;.&lt;/p&gt;
 &lt;p&gt;In this challenge, we could notice and understand what are the operations required from us to get the flag even without looking at the source code. I noticed that it is quite common among picoCTF challenges to be represented in this form. Of course, I am going to cover the source code as well for our understanding of what&amp;rsquo;s going on under the hood.
 Let&amp;rsquo;s begin.&lt;/p&gt;
-&lt;p&gt;Available files: &lt;a class=&#34;link&#34; href=&#34;https://jonathanys.github.io/attached_files/writeups/2024/picoctf-2024-fs0-writeup/format-string-0.c&#34; &gt;format-string-0.c&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Available files: &lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/attached_files/writeups/2024/picoctf-2024-fs0-writeup/format-string-0.c&#34; &gt;format-string-0.c&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;first-look&#34;&gt;First look
 &lt;/h2&gt;&lt;p&gt;We connect to the server through the provided instance. In my case:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
