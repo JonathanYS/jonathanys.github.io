@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="PicoCTF 2021 - Stonks challenge Write-up">
 <title>PicoCTF 2021 Stonks Writeup</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/Write-ups/picoctf-2021-stonks-writeup/'>
+<link rel='canonical' href='https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/'>
 
 <link rel="stylesheet" href="/scss/style.min.e61342f88436f383f290c54cf2119f875401e326521bce325a4fb2720ab3acab.css"><meta property='og:title' content="PicoCTF 2021 Stonks Writeup">
 <meta property='og:description' content="PicoCTF 2021 - Stonks challenge Write-up">
-<meta property='og:url' content='http://localhost:1313/posts/Write-ups/picoctf-2021-stonks-writeup/'>
+<meta property='og:url' content='https://jonathanys.github.io/posts/Write-ups/picoctf-2021-stonks-writeup/'>
 <meta property='og:site_name' content='JonathanYS'>
-<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='pwn' /><meta property='article:tag' content='cybersecurity' /><meta property='article:tag' content='binary exploitation' /><meta property='article:published_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='og:image' content='http://localhost:1313/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='pwn' /><meta property='article:tag' content='cybersecurity' /><meta property='article:tag' content='binary exploitation' /><meta property='article:published_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-03-31T00:00:00&#43;00:00'/><meta property='og:image' content='https://jonathanys.github.io/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg' />
 <meta name="twitter:title" content="PicoCTF 2021 Stonks Writeup">
 <meta name="twitter:description" content="PicoCTF 2021 - Stonks challenge Write-up"><meta name="twitter:card" content="summary">
-    <meta name="twitter:image" content='http://localhost:1313/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg' />
+    <meta name="twitter:image" content='https://jonathanys.github.io/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg' />
     <link rel="shortcut icon" href="/Yonatan_Deri-Logo-300-300.png" />
 
   
@@ -514,54 +514,54 @@ The more elegant and maybe better way to do this operation would be to use RegEx
     
         
     <script
-    src="https://giscus.app/client.js"
-    data-repo="jonathanys/jonathanys.github.io"
-    data-repo-id=""
-    data-category="Website&#39;s Comments"
-    data-category-id=""
-    data-mapping="title"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="top"
-    data-theme="light_high_contrast"
-    data-lang="en"
-    crossorigin="anonymous"
-    async
-></script>
-<script>
-    function setGiscusTheme(theme) {
-        let giscus = document.querySelector("iframe.giscus-frame");
-        if (giscus) {
-            giscus.contentWindow.postMessage(
-                {
-                    giscus: {
-                        setConfig: {
-                            theme: theme,
+            src="https://giscus.app/client.js"
+            data-repo="jonathanys/site-blog-comments"
+            data-repo-id="R_kgDOMpdvWQ"
+            data-category="General"
+            data-category-id="DIC_kwDOMpdvWc4Ch_-e"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="light_high_contrast"
+            data-lang="en"
+            crossorigin="anonymous"
+            async
+        ></script>
+        <script>
+            function setGiscusTheme(theme) {
+                let giscus = document.querySelector("iframe.giscus-frame");
+                if (giscus) {
+                    giscus.contentWindow.postMessage(
+                        {
+                            giscus: {
+                                setConfig: {
+                                    theme: theme,
+                                },
+                            },
                         },
-                    },
-                },
-                "https://giscus.app"
-            );
-        }
-    }
-
-    (function () {
-        addEventListener("message", (e) => {
-            if (event.origin !== "https://giscus.app") return;
-            handler();
-        });
-        window.addEventListener("onColorSchemeChange", handler);
-
-        function handler() {
-            if (document.documentElement.dataset.scheme === "light") {
-                setGiscusTheme('light_high_contrast');
-            } else {
-                setGiscusTheme('dark_high_contrast');
+                        "https://giscus.app"
+                    );
+                }
             }
-        }
-    })();
-</script>
+
+            (function () {
+                addEventListener("message", (e) => {
+                    if (event.origin !== "https://giscus.app") return;
+                    handler();
+                });
+                window.addEventListener("onColorSchemeChange", handler);
+
+                function handler() {
+                    if (document.documentElement.dataset.scheme === "light") {
+                        setGiscusTheme('light_high_contrast');
+                    } else {
+                        setGiscusTheme('dark_high_contrast');
+                    }
+                }
+            })();
+        </script>
 
     
 
