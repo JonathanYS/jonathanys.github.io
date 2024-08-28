@@ -23,7 +23,7 @@ languages:
 services:
     # Change it to your Disqus shortname before using
     disqus:
-        shortname: "hugo-theme-stack"
+        shortname:
     # GA Tracking ID
     googleAnalytics:
         id:
@@ -47,7 +47,7 @@ params:
         lastUpdated: Jan 02, 2006 15:04 MST
 
     sidebar:
-        subtitle: Hack or be hacked.
+        subtitle: Cybersecurity adventures.
         avatar:
             enabled: true
             local: true
