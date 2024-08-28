@@ -32,6 +32,7 @@ permalinks:
     page: /:slug/
 
 params:
+    disableComments: false
     mainSections:
         - posts
     featuredImageField: image
@@ -119,16 +120,16 @@ params:
 
         # See https://cactus.chat/docs/reference/web-client/#configuration for description of the various options
         cactus:
-            defaultHomeserverUrl: "https://matrix.cactus.chat:8448"
-            serverName: "cactus.chat"
+            defaultHomeserverUrl:
+            serverName:
             siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
         giscus:
-            repo: jonathanys/jonathanys.github.io
-            repoID:
-            category: Website's Comments
-            categoryID:
-            mapping:
+            repo: jonathanys/site-blog-comments
+            repoID: R_kgDOMpdvWQ
+            category: General
+            categoryID: DIC_kwDOMpdvWc4Ch_-e
+            mapping: pathname
             lightTheme: light_high_contrast
             darkTheme: dark_high_contrast
             reactionsEnabled: 1
