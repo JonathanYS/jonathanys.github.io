@@ -22,7 +22,7 @@ disableComments = false
 This challenge was part of the PicoCTF 2021 and was part of the Binary Exploitation genre. It was very fun to solve.
 Let's start with the examination.
 
-Available files: [vuln.c](attached_files/writeups/2024/picoctf-2021-stonks-writeup/vuln.c)
+Available files: [vuln.c](/attached_files/writeups/2024/picoctf-2021-stonks-writeup/vuln.c)
 
 ## Examination
 After reading a bit of the code we can detect a Format String vulnerability.
