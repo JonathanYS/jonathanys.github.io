@@ -16,7 +16,7 @@
         <description>&lt;img src="https://jonathanys.github.io/images/2024-thumbs/picoctf-2021-stonks-writeup.jpg" alt="Featured image of post PicoCTF 2021 Stonks Writeup" /&gt;&lt;h1 id=&#34;stonks&#34;&gt;Stonks
 &lt;/h1&gt;&lt;p&gt;This challenge was part of the PicoCTF 2021 and was part of the Binary Exploitation genre. It was very fun to solve.
 Let&amp;rsquo;s start with the examination.&lt;/p&gt;
-&lt;p&gt;Available files: &lt;a class=&#34;link&#34; href=&#34;attached_files/writeups/2024/picoctf-2021-stonks-writeup/vuln.c&#34; &gt;vuln.c&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Available files: &lt;a class=&#34;link&#34; href=&#34;https://jonathanys.github.io/attached_files/writeups/2024/picoctf-2021-stonks-writeup/vuln.c&#34; &gt;vuln.c&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;examination&#34;&gt;Examination
 &lt;/h2&gt;&lt;p&gt;After reading a bit of the code we can detect a Format String vulnerability.
 The interesting function in this program is &lt;b style=&#34;color:blue;&#34;&gt;buy_stonks&lt;/b&gt;.&lt;/p&gt;
